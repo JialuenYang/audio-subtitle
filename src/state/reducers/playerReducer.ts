@@ -2,6 +2,7 @@ import { ActionType } from "../action-types";
 
 const initialState = {
   currentTime: 0,
+  newTime: 0,
 };
 
 type Action = {
@@ -15,6 +16,11 @@ const reducer = (state = initialState, action: Action) => {
       return {
         ...state,
         currentTime: action.payload,
+      };
+    case ActionType.SET_NEW_TIME:
+      return {
+        ...state,
+        newTime: action.payload,
       };
     default:
       return state;

@@ -7,8 +7,12 @@ import { actionCreators } from "./state";
 import WaveformPlayer from "./components/WaveformPlayer";
 import exampleAudio from "./assets/standard-captions-example.mp3";
 import SubtitlePlayer from "./components/SubtitlePlayer";
+import SubtitleSearch from "./components/SubtitleSearch";
+import { useState } from "react";
 
 const App = () => {
+  const [wf, setWf] = useState();
+
   const state = useSelector((state: RootState) => state.files);
   const dispatch = useDispatch();
   const { setAudioBlob, setSubtitleText } = bindActionCreators(
@@ -149,7 +153,10 @@ me a higher interest rate.
         </Center>
       )}
       {state.subtitleText && <SubtitlePlayer />}
-      {state.audioBlob && <WaveformPlayer url={state.audioBlob} />}
+      {state.audioBlob && (
+        <WaveformPlayer setWf={setWf} url={state.audioBlob} />
+      )}
+      {state.audioBlob && state.subtitleText && <SubtitleSearch wf={wf} />}
     </div>
   );
 };

@@ -7,8 +7,8 @@ import {
   BsFillVolumeDownFill,
   BsFillVolumeUpFill,
 } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { actionCreators } from "../../state";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators, RootState } from "../../state";
 import { bindActionCreators } from "redux";
 
 const formWaveSurferOptions = (ref: any) => ({
@@ -28,6 +28,7 @@ const formWaveSurferOptions = (ref: any) => ({
 
 type Props = {
   url: string;
+  setWf: any;
 };
 
 const WaveformPlayer = (props: Props) => {
@@ -37,10 +38,17 @@ const WaveformPlayer = (props: Props) => {
   const [playing, setPlay] = useState(false);
   const [volume, setVolume] = useState(0.2);
   const [oldVolume, setOldVolume] = useState(volume);
-  //   const [currentTime, setCurrentTime] = useState(0);
 
+  const state = useSelector((state: RootState) => state.player);
   const dispatch = useDispatch();
   const { setCurrentTime } = bindActionCreators(actionCreators, dispatch);
+
+  useEffect(() => {
+    if (wavesurfer?.current) {
+      const duration = wavesurfer.current.getDuration();
+      wavesurfer.current.seekTo(state.newTime / duration);
+    }
+  }, [state.newTime]);
 
   // create new WaveSurfer instance
   // On component mount and when url changes
@@ -51,6 +59,8 @@ const WaveformPlayer = (props: Props) => {
     wavesurfer.current = WaveSurfer.create(options);
 
     wavesurfer.current.load(url);
+
+    props.setWf(wavesurfer.current);
 
     wavesurfer.current.on("ready", () => {
       // https://wavesurfer-js.org/docs/methods.html
@@ -112,7 +122,6 @@ const WaveformPlayer = (props: Props) => {
 
   return (
     <div>
-      {/* {currentTime} */}
       <div id="waveform" ref={waveformRef} />
       <div className="controls">
         <Center>

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import srtParser2 from "srt-parser-2";
-import { Center } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../state";
+import { Center, Text } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators, RootState } from "../../state";
+import { bindActionCreators } from "redux";
 
 type SrtParser = {
   id: string;
@@ -12,10 +13,11 @@ type SrtParser = {
 }[];
 
 const SubtitlePlayer = () => {
-  const [subtitleArray, setSubtitleArray] = useState<SrtParser>();
   const [text, setText] = useState<string>("");
 
   const state = useSelector((state: RootState) => state);
+  const dispatch = useDispatch();
+  const { setSubtitleArray } = bindActionCreators(actionCreators, dispatch);
 
   const strToTime = (str: string) => {
     const parts = str.split(",");
@@ -46,8 +48,8 @@ const SubtitlePlayer = () => {
   }, []);
 
   useEffect(() => {
-    const elements: any = subtitleArray?.filter(
-      (e) =>
+    const elements: any = state.files.subtitleArray?.filter(
+      (e: any) =>
         e.startTime <= state.player.currentTime &&
         e.endTime >= state.player.currentTime
     );
@@ -59,8 +61,8 @@ const SubtitlePlayer = () => {
   });
 
   return (
-    <Center bg="tomato" h="14" w="100%" color="white">
-      {text}
+    <Center bg="tomato" h="20" w="100%" color="white">
+      <Text fontSize="3xl">{text}</Text>
     </Center>
   );
 };
