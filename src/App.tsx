@@ -142,22 +142,22 @@ me a higher interest rate.
   };
 
   return (
-    <div>
-      {!state.audioBlob && !state.subtitleText && (
+    <>
+      {(!state.audioBlob || !state.subtitleText) && (
         <Center>
           <InputFile fileType=".srt">Browse .SRT file</InputFile>
           <InputFile fileType=".mp3">Browse .MP3 file</InputFile>
           <Button onClick={onDemoClick}>Use demo files</Button>
-          <Text>{state.audioBlob}</Text>
-          <Text>{state.subtitleText}</Text>
         </Center>
       )}
-      {state.subtitleText && <SubtitlePlayer />}
-      {state.audioBlob && (
-        <WaveformPlayer setWf={setWf} url={state.audioBlob} />
+      {state.subtitleText && state.audioBlob && (
+        <>
+          <SubtitlePlayer />
+          <WaveformPlayer setWf={setWf} url={state.audioBlob} />
+          <SubtitleSearch wf={wf} />
+        </>
       )}
-      {state.audioBlob && state.subtitleText && <SubtitleSearch wf={wf} />}
-    </div>
+    </>
   );
 };
 
