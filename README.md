@@ -7,3 +7,5 @@ https://jialuenyang.github.io/audio-subtitle/
 
 1. .MP3 audio file
 2. .SRT subtitle file for the MP3
+
+Or use the demo files option I have already provided to see how it works.
